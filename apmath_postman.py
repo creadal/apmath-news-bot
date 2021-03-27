@@ -63,7 +63,6 @@ def bob_do_something():
     news = parser.texts
     signatures = parser.signatures
 
-    file_append = open("news", "a+")
     file_read = open("news", "r")
 
     news_notes = []
@@ -71,13 +70,22 @@ def bob_do_something():
     for line in file_read:
         news_notes.append(line)
 
+    file_read.close()
+
     for i in range(len(news)):
         h = hashlib.md5(bytes(news[-i-1], 'utf-8'))
         if (str(h.hexdigest()) + '\n') not in news_notes:
+            file_append = open("news", "a+")
+
             file_append.write(str(h.hexdigest()) + '\n')
             print(str(h.hexdigest()) + ' posted\n')
 
             post(news[-i-1], signatures[-i-1])
+
+            file_append.close()
+
+    
+
 
 while True:
     try:
@@ -86,4 +94,4 @@ while True:
         print(time.clock())
     except:
         print("Unhandled exception. Restarting program.")
-    
+
